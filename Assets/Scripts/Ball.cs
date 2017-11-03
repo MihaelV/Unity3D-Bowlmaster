@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour {
 
     public bool inPlay = false;
 
-    public Vector3 ballStartPosition; 
+    private Vector3 ballStartPosition; 
 
 	// Use this for initialization
 	void Start ()

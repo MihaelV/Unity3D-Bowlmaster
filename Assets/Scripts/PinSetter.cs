@@ -4,18 +4,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PinSetter : MonoBehaviour {
+
+    public GameObject pinSet;
     private Ball ball;
     public Text standingDisplay;
     private bool ballEnteredBox = false;
-
-
     public int lastStandingCount = -1;
     //kada se je zadnje Text tj broj stojecih pinova promijenio
     private float lastChangeTime;
+    
 
     // Use this for initialization
     void Start () {
         ball = GameObject.FindObjectOfType<Ball>();
+
 	}
 	
 	// Update is called once per frame
@@ -26,11 +28,38 @@ public class PinSetter : MonoBehaviour {
         //if ball entered box
         if (ballEnteredBox)
         {
-            CheckStanding();
+            UpdateStandingCountAndsettle();
         }
 	}
 
-    void CheckStanding()
+    public void RaisePins()
+    {
+        //podiže pinove za distanceToRaise
+        Debug.Log("Raising Pins");
+        foreach (Pin pin in GameObject.FindObjectsOfType<Pin>())
+        {
+            pin.Raise();
+        }
+    }
+
+    public void LowerPins()
+    {
+        Debug.Log("Lowering Pins");
+        foreach (Pin pin in GameObject.FindObjectsOfType<Pin>())
+        {
+            
+            pin.Lower();
+        }
+    }
+
+    public void RenewPins()
+    {
+        Debug.Log("Renewing Pins");
+        GameObject newPins = Instantiate(pinSet);
+        newPins.transform.position += new Vector3(0, 20, 0);
+    }
+
+    void UpdateStandingCountAndsettle()
     {
         //update lastStandingCount
         //call PinsHaveSettled() when they have
@@ -91,13 +120,5 @@ public class PinSetter : MonoBehaviour {
         }
     }
 
-    void OnTriggerExit(Collider collider)
-    {
-        GameObject thingLeft = collider.gameObject;
-
-        if (thingLeft.GetComponent<Pin>())
-        {
-            Destroy(thingLeft);
-        }
-    }
+ 
 }
