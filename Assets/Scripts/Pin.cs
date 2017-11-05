@@ -46,7 +46,8 @@ public class Pin : MonoBehaviour {
         {
             rigid.useGravity = false;
             transform.Translate(new Vector3(0, distanceToRaise, 0), Space.World);
-            
+            transform.rotation = Quaternion.Euler(270f, 0, 0); //uspravlja pin na točno 270°
+
         }
     }
 

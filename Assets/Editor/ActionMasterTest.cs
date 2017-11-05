@@ -16,6 +16,7 @@ public class ActionMasterTest
     private ActionMaster.Action reset = ActionMaster.Action.Reset;
     private ActionMaster.Action endGame = ActionMaster.Action.EndGame;
 
+
     [SetUp] //this runs every time when test runs
     public void Setup()
     {
@@ -91,14 +92,14 @@ public class ActionMasterTest
     [Test]
     public void TT10StrikeAnd0ReturnsTidy()
     {
-        int[] rolls = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 0};    
+        int[] rolls = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 0 };
         Assert.AreEqual(tidy, ActionMaster.NextAction(rolls.ToList()));
     }
 
     [Test]
     public void TT11FirstFrame010SecondFrame51ReturnsTidy()
     {
-        int[] rolls = { 0, 10, 5 ,1};
+        int[] rolls = { 0, 10, 5, 1 };
         Assert.AreEqual(endTurn, ActionMaster.NextAction(rolls.ToList()));
     }
 
@@ -114,7 +115,7 @@ public class ActionMasterTest
     [Test]
     public void TT13Dondi10thFrameTurkey()
     {
-        int[] rolls = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10 };       
+        int[] rolls = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 10, 10, 10 };
         Assert.AreEqual(endGame, ActionMaster.NextAction(rolls.ToList()));
     }
 
@@ -125,19 +126,20 @@ public class ActionMasterTest
         int[] rolls = { 0, 1 };
         Assert.AreEqual(endTurn, ActionMaster.NextAction(rolls.ToList()));
     }
-
-    //[Test]
-    //public void ScoreMasterTestSimplePasses() {
-    //	// Use the Assert class to test conditions.
-    //}
-
-    //// A UnityTest behaves like a coroutine in PlayMode
-    //// and allows you to yield null to skip a frame in EditMode
-    //[UnityTest]
-    //public IEnumerator ScoreMasterTestWithEnumeratorPasses() {
-    //	// Use the Assert class to test conditions.
-    //	// yield to skip a frame
-    //	yield return null;
-    //}
 }
+
+//[Test]
+//public void ScoreMasterTestSimplePasses() {
+//	// Use the Assert class to test conditions.
+//}
+
+//// A UnityTest behaves like a coroutine in PlayMode
+//// and allows you to yield null to skip a frame in EditMode
+//[UnityTest]
+//public IEnumerator ScoreMasterTestWithEnumeratorPasses() {
+//	// Use the Assert class to test conditions.
+//	// yield to skip a frame
+//	yield return null;
+//}
+//}
 

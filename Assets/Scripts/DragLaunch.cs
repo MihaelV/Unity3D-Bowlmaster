@@ -19,11 +19,14 @@ public class DragLaunch : MonoBehaviour
     }
 
     public void MoveStart(float amount)
-    {
+    {        
         //ako smo lansirali loptu ne mozemo je vise micati lijevo ni desno
         if (ball.inPlay == false)
         {
-            ball.transform.Translate(new Vector3(amount, 0, 0));
+            float y = ball.transform.position.y;
+            float z = ball.transform.position.z;
+            float x = Mathf.Clamp(ball.transform.position.x + amount, -50f, 50f);
+            ball.transform.position = new Vector3(x,y,z);
         }
     }
 
