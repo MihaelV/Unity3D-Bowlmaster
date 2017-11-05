@@ -5,18 +5,22 @@ using UnityEngine.UI;
 
 public class PinSetter : MonoBehaviour {
 
+    private ActionMaster actionMaster = new ActionMaster();
+    private Animator animator;
     public GameObject pinSet;
     private Ball ball;
     public Text standingDisplay;
-    private bool ballEnteredBox = false;
-    public int lastStandingCount = -1;
+    private bool ballOutOfPlay = false;
+    private int lastStandingCount = -1;
     //kada se je zadnje Text tj broj stojecih pinova promijenio
     private float lastChangeTime;
-    
+    private int lastSettledCount = 10;
+
 
     // Use this for initialization
     void Start () {
         ball = GameObject.FindObjectOfType<Ball>();
+        animator = GetComponent<Animator>();
 
 	}
 	
@@ -26,11 +30,17 @@ public class PinSetter : MonoBehaviour {
 
 
         //if ball entered box
-        if (ballEnteredBox)
+        if (ballOutOfPlay)
         {
             UpdateStandingCountAndsettle();
+            standingDisplay.color = Color.red;
         }
 	}
+
+    public void SetBallOutOfPlay()
+    {
+        ballOutOfPlay = true;
+    }
 
     public void RaisePins()
     {
@@ -39,6 +49,7 @@ public class PinSetter : MonoBehaviour {
         foreach (Pin pin in GameObject.FindObjectsOfType<Pin>())
         {
             pin.Raise();
+            pin.transform.rotation = Quaternion.Euler(270f,0,0); //uspravlja pin na točno 270°
         }
     }
 
@@ -81,14 +92,38 @@ public class PinSetter : MonoBehaviour {
 
     void PinsHaveSettled()
     {
+        
+        int standing = CountStanding();
+        int pinFall = lastSettledCount - standing;
+        lastSettledCount = standing;
+
+        ActionMaster.Action action = actionMaster.Bowl(pinFall);
+        Debug.Log(action);
+        if(action == ActionMaster.Action.Tidy)
+        {            
+            animator.SetTrigger("tidyTrigger");
+        }
+        else if(action == ActionMaster.Action.Reset)
+        {
+            animator.SetTrigger("resetTrigger");
+            lastSettledCount = 10;
+        }
+        else if(action == ActionMaster.Action.EndTurn)
+        {
+            animator.SetTrigger("resetTrigger");
+            lastSettledCount = 10;
+        }
+        else if (action == ActionMaster.Action.EndGame)
+        {
+            throw new UnityException("Don't know how to handle EndGame!");
+        }
+
         lastStandingCount = -1;
-        ballEnteredBox = false;
+        ballOutOfPlay = false;
         standingDisplay.color = Color.green;
 
         //dok se pinovi smire resetiraj loptu
-        ball.ResetirajLoptu();
-
-
+        ball.ResetirajLoptu();        
     }
 
 
@@ -96,29 +131,16 @@ public class PinSetter : MonoBehaviour {
     {
         int standing = 0;
         //Prolazimo kroz sve pinove i provjeravamo dali stoje 
-        foreach(Pin pin in GameObject.FindObjectsOfType<Pin>())
+        foreach (Pin pin in GameObject.FindObjectsOfType<Pin>())
         {
             if (pin.IsStanding())
             {
                 standing++;
             }
-        }
-
+        }        
         return standing;
-    }
+    }  
 
-   
-
-    void OnTriggerEnter(Collider collider)
-    {
-        GameObject thing = collider.gameObject;
-        //lopta ulazi u play box
-        if (thing.GetComponent<Ball>())
-        {
-            ballEnteredBox = true;
-            standingDisplay.color = Color.red;
-        }
-    }
 
  
 }
