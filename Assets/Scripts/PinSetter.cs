@@ -4,20 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class PinSetter : MonoBehaviour {
-
-    private ActionMasterOld actionMaster = new ActionMasterOld();
+    
     private Animator animator;
     public GameObject pinSet;
     private PinCounter pinCounter;
-
+    
 
 
     // Use this for initialization
     void Start () {
         animator = GetComponent<Animator>();
         pinCounter = GameObject.FindObjectOfType<PinCounter>();
-
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -72,9 +70,9 @@ public class PinSetter : MonoBehaviour {
         else if (action == ActionMasterOld.Action.EndGame)
         {
             throw new UnityException("Don't know how to handle EndGame!");
+            // TODO            
+            // add win screen            
         }
 
-    }
-
-
+    }  
 }
